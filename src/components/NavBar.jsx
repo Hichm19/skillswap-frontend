@@ -1,19 +1,20 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function NavBar() {
   return (
-    <div>
-        <nav>
-            <link to="/">SkillSwap</link>
+    <div className="bg-white px-4 py-2 shadow-md">
+        <nav className="max-w-7xl mx-auto flex items-center justify-between">
+            <Link to="/">SkillSwap</Link>
 
-            <div>
-                <link to ="/">Accueil</link>
-                <link to ="/">Explorer</link>
-                <link to ="/">Fonctionnements</link>
+            <div className="flex gap-6">
+                <Link to="/">Accueil</Link>
+                <Link to="/">Explorer</Link>
+                <Link to="/">Fonctionnements</Link>
             </div>
-            <div>
-                <link to ="/connexion">Se connecter</link>
-                <link to ="/inscription">S'inscrire</link>
+            <div className="flex gap-4">
+                <Link to="/connexion">Se connecter</Link>
+                <Link to="/inscription">S'inscrire</Link>
             </div>
         </nav>
     </div>
