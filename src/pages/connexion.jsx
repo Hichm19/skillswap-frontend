@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 
 function Connexion() {
-  // État pour afficher/masquer le mot de passe
+  
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  }); 
+  const [error, setError]= useState('');
+  const [loading, setLoading] = useState(false);
 
   return (
     <div className="
@@ -112,7 +118,7 @@ function Connexion() {
                   font-medium 
                   text-gray-300
                   mb-2
-                "
+                "q
               >
                 Adresse email
               </label>
