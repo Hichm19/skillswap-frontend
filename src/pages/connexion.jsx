@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 function Connexion() {
   
@@ -9,6 +11,31 @@ function Connexion() {
   }); 
   const [error, setError]= useState('');
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleChange =(e) => {
+    const {name, value}= e.target ;
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await login(formData);
+      localStorage.setItem('token', response.data.token);
+      navigate('/dashboard');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Email ou mot de passe incorrect');
+    }finally {
+      setLoading(false)
+    } 
+  }
+
 
   return (
     <div className="
@@ -107,7 +134,16 @@ function Connexion() {
 
         {/* Formulaire */}
         <div className="p-8 pt-6">
-          <form>
+          <form onSubmit={handleSubmit}>
+
+          {
+            error && (
+              <div className=" mb-4 p-3 bg-red-600 text-white rounded">
+                {error}
+              </div>
+            )
+          }
+
             {/* Champ Email */}
             <div className="mb-6">
               <label 
@@ -118,7 +154,7 @@ function Connexion() {
                   font-medium 
                   text-gray-300
                   mb-2
-                "q
+                "
               >
                 Adresse email
               </label>
@@ -154,6 +190,8 @@ function Connexion() {
                   type="email" 
                   id="email" 
                   name="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   required
                   className="
                     w-full 
@@ -225,6 +263,8 @@ function Connexion() {
                   type={showPassword ? "text" : "password"}
                   id="password" 
                   name="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   required
                   className="
                     w-full 
