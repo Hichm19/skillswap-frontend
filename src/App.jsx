@@ -3,6 +3,10 @@ import Accueil from "./pages/Accueil";
 import Connexion from './pages/connexion';
 import Inscription from './pages/inscription';
 import Dashboard from "./pages/dashboard";
+import ProtectedRoute from "./ProtectedRoute";
+import Messages from "./components/Messages";
+import DashUser from "./components/DashUser"
+import Suggestion from "./components/SuggestionsPages/Suggestions"
 
 function App() {
   return (
@@ -10,7 +14,16 @@ function App() {
       <Route path="/" element={<Accueil/>} />
       <Route path="/connexion" element={<Connexion/>} />
       <Route path="/inscription" element={<Inscription/>} />
-      <Route path="/dashboard" element={<Dashboard/>} />
+      
+      <Route element ={<ProtectedRoute/>}>
+          <Route path="/dashboard" element={<Dashboard/>}>
+              <Route index element={<DashUser/>} />
+              <Route path="messages" element={<Messages/>} />
+              <Route path="suggestions" element={<Suggestion/>} />
+          </Route>
+          
+      </Route>
+
     </Routes>
   )
 }

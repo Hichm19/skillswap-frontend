@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { register } from "../api/auth.api";
 
 function Inscription() {
   
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showpassword_confirmation, setShowpassword_confirmation] = useState(false);
   const [formData, setFormData] = useState({
-    nom: '',
+    name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    password_confirmation: ''
   }); 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -28,12 +29,12 @@ function Inscription() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.nom.trim() || formData.email.trim() || formData.password.trim() || formData.confirmPassword.trim()){
+    if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !formData.password_confirmation.trim()){
       setError("veuillez remplir tous les champs")
       return;
     }
     
-    if (formData.password != formData.confirmPassword) {
+    if (formData.password != formData.password_confirmation) {
       setError("Les mots de passe ne correspondent pas")
       return;
     }
@@ -214,9 +215,9 @@ function Inscription() {
                 </div>
                 <input 
                   type="text" 
-                  id="nom" 
-                  name="nom"
-                  value={formData.nom}
+                  id="name" 
+                  name="name"
+                  value={formData.name}
                   onChange={handleChange}
                   required
                   className="
@@ -467,10 +468,10 @@ function Inscription() {
                   </svg>
                 </div>
                 <input 
-                  type={showConfirmPassword ? "text" : "password"}
-                  id="confirmPassword" 
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
+                  type={showpassword_confirmation ? "text" : "password"}
+                  id="password_confirmation" 
+                  name="password_confirmation"
+                  value={formData.showpassword_confirmation}
                   onChange={handleChange}
                   required
                   className="
@@ -496,7 +497,7 @@ function Inscription() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() => setShowpassword_confirmation(!showpassword_confirmation)}
                   className="
                     absolute 
                     inset-y-0 
@@ -509,9 +510,9 @@ function Inscription() {
                     transition-colors 
                     duration-300
                   "
-                  aria-label={showConfirmPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  aria-label={showpassword_confirmation ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
-                  {showConfirmPassword ? (
+                  {showpassword_confirmation ? (
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path 
                         strokeLinecap="round" 

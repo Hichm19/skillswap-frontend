@@ -25,7 +25,7 @@ function SideBar() {
           </Link>
 
           <Link 
-            to="/messages" 
+            to="messages" 
             className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +35,7 @@ function SideBar() {
           </Link>
 
           <Link 
-            to="/suggestions" 
+            to="suggestions" 
             className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,7 +45,7 @@ function SideBar() {
           </Link>
 
           <Link 
-            to="/notifications" 
+            to="notifications" 
             className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

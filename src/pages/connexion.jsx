@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { login } from "../api/auth.api";
 
 
 function Connexion() {
@@ -27,7 +28,9 @@ function Connexion() {
     setLoading(true);
     try {
       const response = await login(formData);
-      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+      localStorage.setItem('token', response.data.access_token)
+      console.log(response.data)
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Email ou mot de passe incorrect');
@@ -378,6 +381,7 @@ function Connexion() {
          
             <button 
               type="submit"
+              disabled={loading}
               className="
                 w-full 
                 bg-gradient-to-r 
@@ -408,7 +412,9 @@ function Connexion() {
                 overflow-hidden
               "
             >
-              <span className="relative">Se Connecter</span>
+              <span className="relative">
+                {loading ? "Connexion..." : "Se Connecter" }
+              </span>
             </button>
 
             

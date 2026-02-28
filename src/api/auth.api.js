@@ -11,3 +11,17 @@ export const register =(data) => {
 export const me = () => {
   return api.get("/me");
 };
+
+export const getUser = () => {
+  const user = localStorage.getItem('user')
+  if (!user) return null;
+  try {
+    return JSON.parse(user)
+  } catch (error) {
+    return null
+  }
+}
+
+export const islogged = () => {
+  return !!localStorage.getItem('token')
+}
