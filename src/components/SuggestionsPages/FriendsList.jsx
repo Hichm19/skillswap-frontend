@@ -17,7 +17,6 @@ function FriendsList() {
       setLoading(true)
       const response = await GetAllFriend()
       setFriends(response.data.data || [])
-      console.log('Amis chargés:', response.data)
     } catch (error) {
       console.error('Erreur lors du chargement des amis:', error)
     } finally {
@@ -30,7 +29,6 @@ function FriendsList() {
       try {
         await DeleteFriend(friendId)
         setFriends(friends.filter(friend => friend.id !== friendId))
-        alert('Ami supprimé avec succès')
       } catch (error) {
         console.error('Erreur lors de la suppression:', error)
         alert('Erreur lors de la suppression')
@@ -38,158 +36,168 @@ function FriendsList() {
     }
   }
 
-  const handleProfileClick = (friendId) => {
-    navigate(`/profil/${friendId}`)
+  const handleProfileClick = (userId) => {
+    if (userId) navigate(`/profil/${userId}`)
   }
 
-  // Fonction pour générer les initiales à partir du nom
   const getInitials = (name) => {
     if (!name) return '?'
-    return name
-      .split(' ')
-      .map(word => word[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)
   }
 
-  // Filtrer les amis par recherche
-  const filteredFriends = friends.filter(friend => 
-    friend.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredFriends = friends.filter(friend =>
+    friend.matched_user?.name?.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <div className="text-center">
-          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-blue-600 border-r-transparent"></div>
-          <p className="mt-4 text-gray-600">Chargement de vos amis...</p>
-        </div>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '200px' }}>
+        <div style={{ width: 28, height: 28, border: '3px solid #e4e6eb', borderTopColor: '#1877f2', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     )
   }
 
   return (
-    <div className="max-w-7xl mx-auto p-6">
-      {/* En-tête */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Mes amis
+    <div style={{ maxWidth: 900, margin: '0 auto', padding: '16px' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: '#050505', margin: 0, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+          Amis
         </h1>
-        <p className="text-gray-600">
-          Vous avez {friends.length} ami{friends.length > 1 ? 's' : ''}
-        </p>
+        <span style={{ color: '#65676b', fontSize: 14, fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif' }}>
+          {friends.length} ami{friends.length > 1 ? 's' : ''}
+        </span>
       </div>
 
       {/* Barre de recherche */}
-      <div className="mb-6">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Rechercher un ami..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full md:w-96 px-4 py-2 pl-10 pr-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-          <svg
-            className="absolute left-3 top-2.5 h-5 w-5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-        </div>
+      <div style={{ position: 'relative', marginBottom: 16 }}>
+        <svg style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', width: 16, height: 16, color: '#65676b' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Rechercher un ami..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: '100%',
+            maxWidth: 340,
+            padding: '8px 12px 8px 34px',
+            border: 'none',
+            borderRadius: 20,
+            backgroundColor: '#f0f2f5',
+            fontSize: 15,
+            color: '#050505',
+            outline: 'none',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            boxSizing: 'border-box',
+          }}
+        />
       </div>
 
-      {/* Liste des amis */}
+      {/* Grille d'amis */}
       {filteredFriends.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredFriends.map((friend) => (
-            <div
-              key={friend.id}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-lg transition-all duration-300"
-            >
-              {/* Photo de profil */}
-              <div 
-                className="relative h-48 bg-gradient-to-br from-blue-500 to-purple-600 cursor-pointer"
-                onClick={() => handleProfileClick(friend.id)}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+          gap: 10,
+        }}>
+          {filteredFriends.map((friend) => {
+            const user = friend.matched_user
+            if (!user) return null
+
+            return (
+              <div
+                key={friend.id}
+                style={{
+                  backgroundColor: '#fff',
+                  borderRadius: 8,
+                  overflow: 'hidden',
+                  boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+                }}
               >
-                {friend.profile_picture ? (
-                  <img
-                    src={friend.profile_picture}
-                    alt={friend.name}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="text-6xl font-bold text-white">
-                      {getInitials(friend.name)}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Informations */}
-              <div className="p-5">
-                <h3 
-                  className="text-xl font-semibold text-gray-900 mb-4 cursor-pointer hover:text-blue-600 transition-colors"
-                  onClick={() => handleProfileClick(friend.id)}
+                {/* Photo */}
+                <div
+                  onClick={() => handleProfileClick(user.id)}
+                  style={{ cursor: 'pointer', width: '100%', paddingTop: '100%', position: 'relative', backgroundColor: '#d8dadf' }}
                 >
-                  {friend.name}
-                </h3>
-
-                {/* Actions */}
-                <button
-                  onClick={() => handleDeleteFriend(friend.id, friend.name)}
-                  className="w-full px-3 py-2 border border-red-300 hover:bg-red-50 text-red-600 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                  {user.profile_picture ? (
+                    <img
+                      src={user.profile_picture}
+                      alt={user.name}
+                      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                     />
-                  </svg>
-                  Supprimer
-                </button>
+                  ) : (
+                    <div style={{
+                      position: 'absolute', inset: 0, display: 'flex',
+                      alignItems: 'center', justifyContent: 'center',
+                      backgroundColor: '#bcc0c4', fontSize: 36, fontWeight: 700, color: '#fff'
+                    }}>
+                      {getInitials(user.name)}
+                    </div>
+                  )}
+                </div>
+
+                {/* Infos + bouton */}
+                <div style={{ padding: '8px 10px 10px' }}>
+                  <p
+                    onClick={() => handleProfileClick(user.id)}
+                    style={{
+                      margin: '0 0 8px 0',
+                      fontSize: 15,
+                      fontWeight: 600,
+                      color: '#050505',
+                      cursor: 'pointer',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {user.name}
+                  </p>
+
+                  <button
+                    onClick={() => handleDeleteFriend(friend.id, user.name)}
+                    style={{
+                      width: '100%',
+                      padding: '6px 0',
+                      backgroundColor: '#e4e6eb',
+                      border: 'none',
+                      borderRadius: 6,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: '#050505',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: 6,
+                      transition: 'background 0.15s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#d8dadf'}
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#e4e6eb'}
+                  >
+                    Supprimer
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       ) : (
-        <div className="text-center py-16 bg-gray-50 rounded-lg">
-          <svg
-            className="mx-auto h-16 w-16 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={1.5}
-              d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-            />
-          </svg>
-          <h3 className="mt-4 text-lg font-medium text-gray-900">
-            {searchTerm ? 'Aucun ami trouvé' : 'Vous n\'avez pas encore d\'amis'}
-          </h3>
-          <p className="mt-2 text-gray-500">
-            {searchTerm 
-              ? 'Essayez avec un autre terme de recherche'
-              : 'Revenez plus tard pour voir vos amis'}
+        <div style={{
+          textAlign: 'center',
+          padding: '40px 0',
+          color: '#65676b',
+          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+        }}>
+          <p style={{ fontSize: 17, fontWeight: 600, color: '#050505', margin: '0 0 4px' }}>
+            {searchTerm ? 'Aucun résultat' : 'Aucun ami pour l\'instant'}
+          </p>
+          <p style={{ fontSize: 14, margin: 0 }}>
+            {searchTerm ? 'Essayez avec un autre nom.' : 'Vos amis apparaîtront ici.'}
           </p>
         </div>
       )}
