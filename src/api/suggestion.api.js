@@ -43,3 +43,6 @@ export const DeleteFriend = (id) =>{
     return api.delete(`/matches/${id}`)
 }
 
+export const SearchUser = (query) => {
+    return api.get('/users/search', { params: { q: query } })
+}

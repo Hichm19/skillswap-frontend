@@ -1,11 +1,13 @@
 import React from 'react'
 import {useState, useEffect} from "react"
 import { useNavigate } from "react-router-dom"
-import {FriendSuggestions, getSendFriendRequest} from "../../api/suggestion.api.js"
+import {FriendSuggestions, getSendFriendRequest, SearchUser} from "../../api/suggestion.api.js"
 
 function SuggestionsList() {
   const [Suggestions , setSuggestions]= useState([])
   const [VisibleCount, setVisibleCount]= useState(6)
+  const [searchTerm, setSearchTerm]= useState("")
+  const [searchResults, setSearchResults] = useState([])
   const navigate = useNavigate()
   
   useEffect( () =>{
@@ -44,14 +46,57 @@ function SuggestionsList() {
       .slice(0, 2);
   }
 
+  useEffect(() => {
+    if (!searchTerm) {
+        setSearchResults([])
+        return
+    }
+
+    const timer = setTimeout(async () => {
+        const response = await SearchUser(searchTerm)
+        setSearchResults(response.data.data)
+    }, 300)
+
+    return () => clearTimeout(timer)
+
+  }, [searchTerm])
+
+  const displayList = searchTerm ? searchResults : Suggestions
+
   return (
     <div className="max-w-7xl mx-auto p-6">
+
+      <div style={{ position: 'relative', marginBottom: 16 }}>
+        <svg style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', width: 16, height: 16, color: '#65676b' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          placeholder="Rechercher un ami..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: '100%',
+            maxWidth: 340,
+            padding: '8px 12px 8px 34px',
+            border: 'none',
+            borderRadius: 20,
+            backgroundColor: '#f0f2f5',
+            fontSize: 15,
+            color: '#050505',
+            outline: 'none',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            boxSizing: 'border-box',
+          }}
+        />
+      </div>
+
       <h2 className="text-2xl font-semibold text-gray-800 mb-6">
         Suggestions d'amis
       </h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {Suggestions.slice(0, VisibleCount).map(({id, name, skills}) => {
+        {displayList.slice(0, VisibleCount).map(({id, name, skills}) => {
           const skillTeach = skills.filter(skill => skill.pivot.type === "teach")
           const skillLearn = skills.filter(skill => skill.pivot.type === "learn")
           
