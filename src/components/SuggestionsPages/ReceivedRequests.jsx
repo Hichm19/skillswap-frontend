@@ -49,8 +49,8 @@ function ReceivedRequests() {
   }
 
   const handleProfileClick = (userId) => {
-    navigate(`/profil/${userId}`)
-  }
+    navigate(`/dashboard/profil/${userId}`)
+  } 
 
   // Fonction pour générer les initiales à partir du nom
   const getInitials = (name) => {

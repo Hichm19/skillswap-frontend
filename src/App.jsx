@@ -21,7 +21,7 @@ function App() {
               <Route index element={<DashUser/>} />
               <Route path="messages" element={<Messages/>} />
               <Route path="suggestions" element={<Suggestion/>} />
-              <Route path="profil" element={<ProfilUser/>} />
+              <Route path="profil/:id" element={<ProfilUser/>} />
           </Route>
           
       </Route>

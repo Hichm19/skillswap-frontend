@@ -37,8 +37,8 @@ function FriendsList() {
   }
 
   const handleProfileClick = (userId) => {
-    if (userId) navigate(`/profil/${userId}`)
-  }
+    navigate(`/dashboard/profil/${userId}`)
+  } 
 
   const getInitials = (name) => {
     if (!name) return '?'
