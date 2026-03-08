@@ -87,7 +87,7 @@ useEffect(()=>{
               <button onClick={()=>navigate("/dashboard/mon-profil")}>
                 Ajouter une comptétence
               </button>
-              <button>
+              <button onClick={()=>navigate("/dashboard/mon-profil")}>
                 Modifier profil
               </button>
           </div>

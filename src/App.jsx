@@ -9,6 +9,7 @@ import DashUser from "./components/DashUser"
 import Suggestion from "./components/SuggestionsPages/Suggestions"
 import ProfilUser from "./components/ProfilUser.jsx" 
 import MonProfil from "./components/MonProfil.jsx"
+import Compétences from "./components/Compétences.jsx"
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
               <Route path="suggestions" element={<Suggestion/>} />
               <Route path="profil/:id" element={<ProfilUser/>} />
               <Route path="mon-profil" element={<MonProfil/>} />
+              
           </Route>
           
       </Route>
