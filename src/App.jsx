@@ -8,6 +8,7 @@ import Messages from "./components/Messages";
 import DashUser from "./components/DashUser"
 import Suggestion from "./components/SuggestionsPages/Suggestions"
 import ProfilUser from "./components/ProfilUser.jsx" 
+import MonProfil from "./components/MonProfil.jsx"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="messages" element={<Messages/>} />
               <Route path="suggestions" element={<Suggestion/>} />
               <Route path="profil/:id" element={<ProfilUser/>} />
+              <Route path="mon-profil" element={<MonProfil/>} />
           </Route>
           
       </Route>
