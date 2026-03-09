@@ -4,11 +4,17 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { FaPencilAlt, FaCamera } from 'react-icons/fa'
 import SkillsModal from './SkillsModal.jsx'
+import ModifProfil from './ModifProfil.jsx'
+import { uploadPhoto } from '../api/users.api'
+import { useRef } from 'react'
+
 
 function MonProfil() {
   const [profil, setProfil] = useState(null)
   const [showSkillsModal, setShowSkillsModal] = useState(false)
+  const [showModifProfil, setShowModifProfil] = useState(false)
   const navigate = useNavigate()
+  const fileInputRef = useRef(null)
 
  
     const LoadProfil = async () => {
@@ -29,11 +35,22 @@ function MonProfil() {
     return name.split(' ').map(word => word[0]).join('').toUpperCase().slice(0, 2)
   }
 
+  const handlePhotoChange = async (e) => {
+      const file = e.target.files[0]
+      if (!file) return
+      await uploadPhoto(file)
+      await LoadProfil()
+  }
+
   const handleModalClose = (shouldRefresh) => {
       setShowSkillsModal(false)
       if (shouldRefresh) LoadProfil()
   }
-
+  
+  const handleEditClose = (shouldRefresh) => {
+    setShowModifProfil(false)
+    if (shouldRefresh) LoadProfil()
+  }
 
   if (!profil) {
     return (
@@ -46,7 +63,7 @@ function MonProfil() {
   return (
     <div className="max-w-xl mx-auto p-8 relative">
       <button
-        onClick={() => navigate('/modifier-profil')}
+        onClick={() => setShowModifProfil(true)}
         className="absolute top-8 left-8 p-2 text-gray-400 hover:text-gray-600 transition-colors"
       >
         <FaPencilAlt className="w-5 h-5" />
@@ -56,17 +73,28 @@ function MonProfil() {
         <div className="relative mb-4">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
             {profil.profile_picture ? (
-              <img src={profil.profile_picture} alt={profil.name} className="w-full h-full rounded-full object-cover" />
+              <img 
+                  src={`http://127.0.0.1:8000${profil.profile_picture}`} 
+                  alt={profil.name} 
+                  className="w-full h-full rounded-full object-cover" 
+              />
             ) : (
               <span className="text-xl font-semibold text-white">{getInitials(profil.name)}</span>
             )}
           </div>
           <button
-            onClick={() => navigate('/modifier-photo')}
-            className="absolute bottom-0 right-0 p-1.5 bg-white rounded-full shadow-md border border-gray-200 hover:bg-gray-50 transition-colors"
+              onClick={() => fileInputRef.current.click()}
+              className="absolute bottom-0 right-0 p-1.5 bg-white rounded-full shadow-md border border-gray-200 hover:bg-gray-50 transition-colors"
           >
-            <FaCamera className="w-4 h-4 text-gray-600" />
+              <FaCamera className="w-4 h-4 text-gray-600" />
           </button>
+          <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handlePhotoChange}
+              className="hidden"
+          />
         </div>
         <h1 className="text-xl font-semibold text-gray-900">{profil.name}</h1>
         <p className="mt-1 text-gray-400 text-sm">{profil.bio ?? "Aucune bio"}</p>
@@ -120,8 +148,15 @@ function MonProfil() {
       {showSkillsModal && (
           <SkillsModal onClose={handleModalClose} />
       )}
+
+      {showModifProfil && (
+       <ModifProfil profil={profil} onClose={handleEditClose} />
+      )}
+
     </div>
+    
   )
+  
 }
 
 export default MonProfil
