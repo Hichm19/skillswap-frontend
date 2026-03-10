@@ -10,6 +10,7 @@ import Suggestion from "./components/SuggestionsPages/Suggestions"
 import ProfilUser from "./components/ProfilUser.jsx" 
 import MonProfil from "./components/MonProfil.jsx"
 import Compétences from "./components/Compétences.jsx"
+import NotificationsPage from "./components/NotificationsPage.jsx"
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
               <Route path="suggestions" element={<Suggestion/>} />
               <Route path="profil/:id" element={<ProfilUser/>} />
               <Route path="mon-profil" element={<MonProfil/>} />
-              
+              <Route path="notifications" element={<NotificationsPage/>} />
           </Route>
           
       </Route>

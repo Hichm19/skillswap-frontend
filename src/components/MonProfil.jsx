@@ -59,7 +59,9 @@ function MonProfil() {
       </div>
     )
   }
+  
 
+  console.log(profil.profile_picture)
   return (
     <div className="max-w-xl mx-auto p-8 relative">
       <button
