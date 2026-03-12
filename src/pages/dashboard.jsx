@@ -4,6 +4,7 @@ import { getUser } from "../api/auth.api.js"
 import { Outlet, useNavigate } from "react-router-dom"
 import Notifications from "../components/Notifications.jsx"
 
+
 function Dashboard() {
   return (
     <div className="flex min-h-screen bg-gray-50">

@@ -7,9 +7,7 @@ function ModifProfil({ profil, onClose }) {
     const [bio, setBio] = useState(profil.bio ?? "")
 
     const handleSubmit = async () => {
-        console.log("données envoyées :", { name, email, bio })
-        const response = await UpdateProfil({ name, email, bio })
-        console.log("réponse :", response)
+        await UpdateProfil({ name, email, bio })
         onClose(true)
     }
 
@@ -22,7 +20,6 @@ function ModifProfil({ profil, onClose }) {
                 className="bg-[#0b1628] border border-white/8 rounded-2xl w-full max-w-md p-6 flex flex-col gap-6"
                 onClick={e => e.stopPropagation()}
             >
-                {/* Header */}
                 <div className="flex items-center justify-between">
                     <h2 className="text-slate-100 text-base font-semibold">Modifier le profil</h2>
                     <button
@@ -33,7 +30,6 @@ function ModifProfil({ profil, onClose }) {
                     </button>
                 </div>
 
-                {/* Champs */}
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1.5">
                         <label className="text-xs text-slate-500 uppercase tracking-widest">Nom</label>
@@ -64,7 +60,6 @@ function ModifProfil({ profil, onClose }) {
                     </div>
                 </div>
 
-                {/* Bouton */}
                 <button
                     onClick={handleSubmit}
                     className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors duration-150"

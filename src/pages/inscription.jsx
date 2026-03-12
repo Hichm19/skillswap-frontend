@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { register } from "../api/auth.api";
 
 function Inscription() {
-  
   const [showPassword, setShowPassword] = useState(false);
-  const [showpassword_confirmation, setShowpassword_confirmation] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -30,11 +29,11 @@ function Inscription() {
     e.preventDefault();
 
     if (!formData.name.trim() || !formData.email.trim() || !formData.password.trim() || !formData.password_confirmation.trim()){
-      setError("veuillez remplir tous les champs")
+      setError("Veuillez remplir tous les champs")
       return;
     }
     
-    if (formData.password != formData.password_confirmation) {
+    if (formData.password !== formData.password_confirmation) {
       setError("Les mots de passe ne correspondent pas")
       return;
     }
@@ -46,8 +45,8 @@ function Inscription() {
       return;
     }
     
-    if (formData.password.length<6) {
-      setError ("Le mot de passe doit dépassé  caractères")
+    if (formData.password.length < 6) {
+      setError("Le mot de passe doit contenir au moins 6 caractères")
       return;
     }
 
@@ -55,13 +54,11 @@ function Inscription() {
     setError('');
     
     try {
-      
       const response = await register(formData);
       localStorage.setItem('token', response.data.token);
       navigate('/dashboard');
-      
     } catch (err) {
-      setError(err.response?.data?.message || 'Erreur lors de l\'inscription');
+      setError(err.response?.data?.message || "Erreur lors de l'inscription");
     } finally {
       setLoading(false);
     } 
@@ -79,7 +76,6 @@ function Inscription() {
       to-gray-900
       p-4
     ">
-      {/* Conteneur principal */}
       <div className="
         w-full 
         max-w-md
@@ -92,7 +88,6 @@ function Inscription() {
         duration-300
         hover:shadow-gray-900/70
       ">
-        {/* En-tête avec décor */}
         <div className="
           relative 
           p-6 
@@ -161,7 +156,6 @@ function Inscription() {
           </div>
         </div>
 
-        {/* Formulaire */}
         <div className="p-8 pt-6">
           <form onSubmit={handleSubmit}>
             {error && (
@@ -175,10 +169,9 @@ function Inscription() {
               </div>
             )}
 
-            {/* Champ Nom & Prénom */}
             <div className="mb-6">
               <label 
-                htmlFor="nom" 
+                htmlFor="name" 
                 className="
                   block 
                   text-sm 
@@ -244,7 +237,6 @@ function Inscription() {
               </div>
             </div>
 
-            {/* Champ Email */}
             <div className="mb-6">
               <label 
                 htmlFor="email" 
@@ -313,7 +305,6 @@ function Inscription() {
               </div>
             </div>
 
-            {/* Champ Mot de passe */}
             <div className="mb-6">
               <label 
                 htmlFor="password" 
@@ -395,31 +386,15 @@ function Inscription() {
                     transition-colors 
                     duration-300
                   "
-                  aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
                   {showPassword ? (
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" 
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                     </svg>
                   ) : (
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" 
-                      />
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" 
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   )}
                 </button>
@@ -429,10 +404,9 @@ function Inscription() {
               </p>
             </div>
 
-            {/* Champ Confirmation de mot de passe */}
             <div className="mb-8">
               <label 
-                htmlFor="confirmPassword" 
+                htmlFor="password_confirmation" 
                 className="
                   block 
                   text-sm 
@@ -468,10 +442,10 @@ function Inscription() {
                   </svg>
                 </div>
                 <input 
-                  type={showpassword_confirmation ? "text" : "password"}
+                  type={showConfirmPassword ? "text" : "password"}
                   id="password_confirmation" 
                   name="password_confirmation"
-                  value={formData.showpassword_confirmation}
+                  value={formData.password_confirmation}
                   onChange={handleChange}
                   required
                   className="
@@ -497,7 +471,7 @@ function Inscription() {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowpassword_confirmation(!showpassword_confirmation)}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="
                     absolute 
                     inset-y-0 
@@ -510,38 +484,21 @@ function Inscription() {
                     transition-colors 
                     duration-300
                   "
-                  aria-label={showpassword_confirmation ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                 >
-                  {showpassword_confirmation ? (
+                  {showConfirmPassword ? (
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" 
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
                     </svg>
                   ) : (
                     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" 
-                      />
-                      <path 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round" 
-                        strokeWidth={2} 
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" 
-                      />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                     </svg>
                   )}
                 </button>
               </div>
             </div>
 
-            {/* Bouton d'inscription */}
             <button 
               type="submit"
               disabled={loading}
@@ -592,23 +549,17 @@ function Inscription() {
               )}
             </button>
 
-            {/* Séparateur */}
             <div className="relative mb-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="
-                  px-2 
-                  bg-gray-800
-                  text-gray-400
-                ">
+                <span className="px-2 bg-gray-800 text-gray-400">
                   Déjà un compte ?
                 </span>
               </div>
             </div>
 
-            {/* Lien vers connexion */}
             <div className="text-center">
               <a 
                 href="/connexion"
@@ -639,7 +590,6 @@ function Inscription() {
                 Se connecter
               </a>
             </div>
-
           </form>
         </div>
       </div>

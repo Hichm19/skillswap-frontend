@@ -27,6 +27,7 @@ function App() {
               <Route path="suggestions" element={<Suggestion/>} />
               <Route path="profil/:id" element={<ProfilUser/>} />
               <Route path="mon-profil" element={<MonProfil/>} />
+              <Route path="compétences" element={<Compétences/>} />
               <Route path="notifications" element={<NotificationsPage/>} />
           </Route>
           

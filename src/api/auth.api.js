@@ -12,6 +12,10 @@ export const me = () => {
   return api.get("/me");
 };
 
+export const logout = () => {
+  return api.post("/logout")
+}
+
 export const getUser = () => {
   const user = localStorage.getItem('user')
   if (!user) return null;

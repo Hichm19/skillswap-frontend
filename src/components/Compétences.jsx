@@ -1,8 +1,10 @@
 import { getAllSkills } from "../api/skills.api"
 import { useState, useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 function Compétences() {
     const [skills, setSkills] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         const loadSkills = async () => {
@@ -19,18 +21,34 @@ function Compétences() {
     }, {})
 
     return (
-        <div className="px-6 py-12">
-            <div className="max-w-2xl mx-auto flex flex-col gap-8">
+        <div className="p-4 sm:p-6">
+            {/* Bouton retour flèche */}
+            <button 
+                onClick={() => navigate(-1)}
+                className="mb-4 sm:mb-6 text-gray-600 hover:text-gray-900"
+            >
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </button>
+
+            {/* Titre */}
+            <h1 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-6">
+                Compétences
+            </h1>
+
+            {/* Liste des compétences */}
+            <div className="space-y-6 sm:space-y-8">
                 {Object.entries(grouped).map(([categorie, items]) => (
                     <div key={categorie}>
-                        <p className="text-xs text-slate-400 mb-3 tracking-widest uppercase">
+                        <p className="text-xs text-gray-400 mb-3 font-medium">
                             {categorie}
                         </p>
-                        <div className="flex flex-wrap gap-x-4 gap-y-2">
+                        <div className="flex flex-wrap gap-2">
                             {items.map(skill => (
                                 <span
                                     key={skill.id}
-                                    className="text-sm text-slate-300 hover:text-white transition-colors duration-150 cursor-default"
+                                    className="text-sm text-gray-700 bg-gray-100 px-3 py-1.5 rounded-md"
                                 >
                                     {skill.name}
                                 </span>
@@ -39,6 +57,13 @@ function Compétences() {
                     </div>
                 ))}
             </div>
+
+            {/* Message si aucune compétence */}
+            {skills.length === 0 && (
+                <p className="text-gray-400 text-center py-8">
+                    Aucune compétence disponible
+                </p>
+            )}
         </div>
     )
 }

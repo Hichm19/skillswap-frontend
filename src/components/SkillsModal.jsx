@@ -43,7 +43,6 @@ function SkillsModal({ onClose }) {
                 className="bg-[#0b1628] border border-white/8 rounded-2xl w-full max-w-xl max-h-[80vh] overflow-y-auto p-6 flex flex-col gap-8"
                 onClick={e => e.stopPropagation()}
             >
-                {/* Header */}
                 <div className="flex items-center justify-between">
                     <h2 className="text-slate-100 text-base font-semibold">Mes compétences</h2>
                     <button
@@ -54,10 +53,8 @@ function SkillsModal({ onClose }) {
                     </button>
                 </div>
 
-                {/* Deux sections */}
                 {["teach", "learn"].map(type => (
                     <div key={type}>
-                        {/* Titre remarquable */}
                         <div className="flex items-center gap-3 mb-5">
                             <span className={`w-1.5 h-5 rounded-full ${type === "teach" ? "bg-blue-500" : "bg-emerald-500"}`} />
                             <p className={`text-sm font-semibold tracking-wide ${type === "teach" ? "text-blue-400" : "text-emerald-400"}`}>
@@ -95,7 +92,6 @@ function SkillsModal({ onClose }) {
                     </div>
                 ))}
 
-                {/* Bouton mettre à jour */}
                 <button
                     onClick={() => onClose(true)}
                     className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-sm font-medium transition-colors duration-150"

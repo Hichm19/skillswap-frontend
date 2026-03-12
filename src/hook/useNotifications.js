@@ -1,47 +1,54 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import echo from '../echo'
 import { getUser } from '../api/auth.api'
 
 function useNotifications() {
     const [notifications, setNotifications] = useState([])
     const currentUser = getUser()
-    const navigate = useNavigate()
 
     useEffect(() => {
         if (!currentUser?.id) return
 
+        // Charger les notifications sauvegardées
+        const saved = localStorage.getItem(`notifications_${currentUser.id}`)
+        if (saved) {
+            setNotifications(JSON.parse(saved))
+        }
+
+        // Écouter les nouveaux événements
         const channel = echo.channel(`user.${currentUser.id}`)
 
         channel.listen('.new-message', (data) => {
-            setNotifications(prev => [...prev, {
+            const newNotif = {
                 id: Date.now(),
                 type: 'message',
                 text: `Nouveau message de ${data.message.sender.name}`,
-                action: () => navigate('/dashboard/messages')
-            }])
+                read: false,
+                createdAt: new Date().toISOString()
+            }
+            setNotifications(prev => [newNotif, ...prev])
         })
 
         channel.listen('.new-friend-request', (data) => {
-            
-            console.log('📨 Données reçues:', data); 
-            console.log('friendRequest:', data.friendRequest); 
-
-            setNotifications(prev => [...prev, {
+            const newNotif = {
                 id: Date.now(),
                 type: 'friend-request',
                 text: `${data.friendRequest.sender.name} vous a envoyé une demande d'ami`,
-                action: () => navigate('/dashboard/notifications')
-            }])
+                read: false,
+                createdAt: new Date().toISOString()
+            }
+            setNotifications(prev => [newNotif, ...prev])
         })
 
         channel.listen('.friend-request-accepted', (data) => {
-            setNotifications(prev => [...prev, {
+            const newNotif = {
                 id: Date.now(),
                 type: 'accepted',
                 text: `${data.friendRequest.receiver.name} a accepté votre demande`,
-                action: () => navigate('/dashboard/messages')
-            }])
+                read: false,
+                createdAt: new Date().toISOString()
+            }
+            setNotifications(prev => [newNotif, ...prev])
         })
 
         return () => {
@@ -49,11 +56,29 @@ function useNotifications() {
         }
     }, [currentUser?.id])
 
+    // Sauvegarder dans localStorage
+    useEffect(() => {
+        if (currentUser?.id) {
+            localStorage.setItem(`notifications_${currentUser.id}`, JSON.stringify(notifications))
+        }
+    }, [notifications, currentUser?.id])
+
+    // Fonctions utilitaires
     const removeNotification = (id) => {
         setNotifications(prev => prev.filter(n => n.id !== id))
     }
 
-    return { notifications, removeNotification }
+    const markAsRead = (id) => {
+        setNotifications(prev => 
+            prev.map(n => n.id === id ? { ...n, read: true } : n)
+        )
+    }
+
+    return { 
+        notifications, 
+        removeNotification, 
+        markAsRead
+    }
 }
 
 export default useNotifications

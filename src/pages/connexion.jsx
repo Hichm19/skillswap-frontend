@@ -1,26 +1,24 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "../api/auth.api";
 
-
 function Connexion() {
-  
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   }); 
-  const [error, setError]= useState('');
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleChange =(e) => {
-    const {name, value}= e.target ;
+  const handleChange = (e) => {
+    const {name, value} = e.target;
     setFormData({
       ...formData,
       [name]: value
-    })
+    });
   }
   
   const handleSubmit = async (e) => {
@@ -30,15 +28,13 @@ function Connexion() {
       const response = await login(formData);
       localStorage.setItem('user', JSON.stringify(response.data.user))
       localStorage.setItem('token', response.data.access_token)
-      console.log(response.data)
       navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Email ou mot de passe incorrect');
-    }finally {
+    } finally {
       setLoading(false)
     } 
   }
-
 
   return (
     <div className="
@@ -52,7 +48,6 @@ function Connexion() {
       to-gray-900
       p-4
     ">
-      {/* Conteneur principal */}
       <div className="
         w-full 
         max-w-md
@@ -65,7 +60,6 @@ function Connexion() {
         duration-300
         hover:shadow-gray-900/70
       ">
-        {/* En-tête avec décor */}
         <div className="
           relative 
           p-6 
@@ -74,7 +68,6 @@ function Connexion() {
           border-b 
           border-gray-700
         ">
-         
           <div className="text-center mb-2">
             <div className="
               w-12 
@@ -135,19 +128,14 @@ function Connexion() {
           </div>
         </div>
 
-        {/* Formulaire */}
         <div className="p-8 pt-6">
           <form onSubmit={handleSubmit}>
-
-          {
-            error && (
-              <div className=" mb-4 p-3 bg-red-600 text-white rounded">
+            {error && (
+              <div className="mb-4 p-3 bg-red-600 text-white rounded">
                 {error}
               </div>
-            )
-          }
+            )}
 
-            {/* Champ Email */}
             <div className="mb-6">
               <label 
                 htmlFor="email" 
@@ -220,7 +208,6 @@ function Connexion() {
               </div>
             </div>
 
-            {/* Champ Mot de passe */}
             <div className="mb-4">
               <label 
                 htmlFor="password" 
@@ -290,7 +277,6 @@ function Connexion() {
                   "
                   placeholder="••••••••"
                 />
-                {/* Bouton voir/masquer le mot de passe */}
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -347,14 +333,12 @@ function Connexion() {
               </div>
             </div>
 
-            {/* Ligne avec "Se souvenir" et "Mot de passe oublié" */}
             <div className="
               flex 
               items-center 
-              justify-between 
+              justify-end 
               mb-8
             ">
-             
               <a 
                 href="/mot-de-passe-oublie"
                 className="
@@ -378,7 +362,6 @@ function Connexion() {
               </a>
             </div>
 
-         
             <button 
               type="submit"
               disabled={loading}
@@ -413,11 +396,10 @@ function Connexion() {
               "
             >
               <span className="relative">
-                {loading ? "Connexion..." : "Se Connecter" }
+                {loading ? "Connexion..." : "Se connecter"}
               </span>
             </button>
 
-            
             <div className="relative mb-6">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-700"></div>
@@ -433,7 +415,6 @@ function Connexion() {
               </div>
             </div>
 
-            
             <div className="text-center">
               <a 
                 href="/inscription"
