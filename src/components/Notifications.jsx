@@ -1,4 +1,4 @@
-import useNotifications from '../hooks/useNotifications'
+import useNotifications from '../hook/useNotifications'
 
 function Notifications() {
     const { notifications, removeNotification } = useNotifications()
@@ -10,11 +10,11 @@ function Notifications() {
             {notifications.map(notif => (
                 <div
                     key={notif.id}
+                    onClick={notif.action}
                     className={`
                         flex items-center justify-between gap-4
                         px-4 py-3 rounded-xl text-sm
-                        border shadow-lg
-                        animate-fade-in
+                        border shadow-lg cursor-pointer
                         ${notif.type === 'message'
                             ? 'bg-[#0b1628] border-blue-800/40 text-blue-300'
                             : notif.type === 'friend-request'
@@ -25,7 +25,10 @@ function Notifications() {
                 >
                     <span>{notif.text}</span>
                     <button
-                        onClick={() => removeNotification(notif.id)}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            removeNotification(notif.id)
+                        }}
                         className="text-slate-500 hover:text-slate-300 transition-colors leading-none"
                     >
                         ×

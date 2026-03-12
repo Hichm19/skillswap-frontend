@@ -1,50 +1,49 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import echo from '../echo'
 import { getUser } from '../api/auth.api'
 
 function useNotifications() {
     const [notifications, setNotifications] = useState([])
     const currentUser = getUser()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (!currentUser?.id) return
 
-        // S'abonne au canal de l'utilisateur connecté
         const channel = echo.channel(`user.${currentUser.id}`)
-        console.log('Abonné au canal :', `user.${currentUser.id}`)
 
-        // Écoute nouveau message
         channel.listen('.new-message', (data) => {
-            console.log('Nouveau message reçu :', data)
             setNotifications(prev => [...prev, {
                 id: Date.now(),
                 type: 'message',
-                text: `Nouveau message de ${data.message.sender_id}`,
-                data
+                text: `Nouveau message de ${data.message.sender.name}`,
+                action: () => navigate('/dashboard/messages')
             }])
         })
 
-        // Écoute nouvelle demande d'ami
         channel.listen('.new-friend-request', (data) => {
+            
+            console.log('📨 Données reçues:', data); 
+            console.log('friendRequest:', data.friendRequest); 
+
             setNotifications(prev => [...prev, {
                 id: Date.now(),
                 type: 'friend-request',
-                text: 'Nouvelle demande d\'ami',
-                data
+                text: `${data.friendRequest.sender.name} vous a envoyé une demande d'ami`,
+                action: () => navigate('/dashboard/notifications')
             }])
         })
 
-        // Écoute demande d'ami acceptée
         channel.listen('.friend-request-accepted', (data) => {
             setNotifications(prev => [...prev, {
                 id: Date.now(),
                 type: 'accepted',
-                text: 'Votre demande d\'ami a été acceptée',
-                data
+                text: `${data.friendRequest.receiver.name} a accepté votre demande`,
+                action: () => navigate('/dashboard/messages')
             }])
         })
 
-        // Nettoyage quand le composant se démonte
         return () => {
             echo.leaveChannel(`user.${currentUser.id}`)
         }

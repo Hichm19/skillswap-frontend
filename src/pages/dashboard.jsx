@@ -1,7 +1,8 @@
 import React from 'react'
 import SideBar from "../components/SideBar" 
-import {getUser} from "../api/auth.api.js"
-import { Outlet, useNavigate } from "react-router-dom";
+import { getUser } from "../api/auth.api.js"
+import { Outlet, useNavigate } from "react-router-dom"
+import Notifications from "../components/Notifications.jsx"
 
 function Dashboard() {
   return (
@@ -13,6 +14,8 @@ function Dashboard() {
           <Outlet />
         </div>
       </main>
+
+      <Notifications />
     </div>
   )
 }

@@ -12,6 +12,7 @@ import MonProfil from "./components/MonProfil.jsx"
 import Compétences from "./components/Compétences.jsx"
 import NotificationsPage from "./components/NotificationsPage.jsx"
 
+
 function App() {
   return (
     <Routes>

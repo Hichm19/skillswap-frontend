@@ -6,11 +6,20 @@ window.Pusher = Pusher;
 const echo = new Echo({
     broadcaster: "reverb",
     key: "9zxwjb7prouwe81ebgtl",
-    wsHost: "127.0.0.1",
+    wsHost: "localhost",
     wsPort: 9000,
+    wssPort: 9000,
     forceTLS: false,
     disableStats: true,
-    cluster: "mt1"
+    enabledTransports: ['ws'],
 });
+
+echo.connector.pusher.connection.bind('connected', () => {
+    console.log('Reverb connecté !')
+})
+
+echo.connector.pusher.connection.bind('error', (err) => {
+    console.log('Erreur Reverb :', err)
+})
 
 export default echo;
